@@ -38,7 +38,8 @@ function App() {
         name:formData.name,
         description:formData.description
       }
-      const res = await axios.post("http://localhost:5000/api/todo",data);
+      const apiUrl = "http://localhost:5000"
+      const res = await axios.post(`${apiUrl}/api/todo`,data);
       setLoading(false);
       fetchTodos();
     }catch(err){
