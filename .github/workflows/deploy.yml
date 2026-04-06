@@ -28,11 +28,6 @@ jobs:
       run: |
         docker push ${{ secrets.DOCKER_USERNAME }}/mern-backend:${{ github.sha }}
         docker push ${{ secrets.DOCKER_USERNAME }}/mern-frontend:${{ github.sha }}
-    
-    - name: Deocde SSH key
-      run: | 
-        echo "${{ secrets.EC2_SSH_KEY }}" | base64 --decode > /tmp/private_key.pem
-        chmod 600 /tmp/private_key.pem
 
     - name: Deploy to EC2
       uses: appleboy/ssh-action@v1.0.0
