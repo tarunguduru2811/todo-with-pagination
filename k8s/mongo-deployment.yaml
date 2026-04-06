@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongo-Deployment
+  name: mongo-deployment
   namespace: mern-app
 spec:
   replicas: 1
@@ -23,17 +23,17 @@ spec:
           valueFrom:
             secretKeyRef:
               name: backend-secrets
-              key: MONGO_USERNAME
+              key: MONGO_INITDB_ROOT_USERNAME  # "root"
         - name: MONGO_INITDB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: backend-secrets
-              key: MONGO_PASSWORD
-        - name: MONGO_INITDB_ROOT_PASSWORD
+              key: MONGO_PASSWORD           # "password"
+        - name: MONGO_INITDB_DATABASE
           valueFrom:
             configMapKeyRef:
               name: backend-config
-              key: MONGO_DATABASE
+              key: MONGO_DATABASE          # "tododb"
         volumeMounts:
         - name: mongo-storage
           mountPath: /data/db

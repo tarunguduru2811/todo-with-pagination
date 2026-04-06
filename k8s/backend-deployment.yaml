@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-Deployment
+  name: backend-deployment
   namespace: mern-app
 
 spec:
@@ -21,14 +21,14 @@ spec:
     spec:
       containers:
       - name: backend
-        image: tarunguduru2811/mern-backend:3ebcb0e43a2894319754849d5d30953a2f3b5aea
+        image: tarunguduru2811/todo-backend:latest
         ports:
         - containerPort: 5000
         envFrom:
         - configMapRef:
-          name: backend-config
+            name: backend-config
         - secretRef:
-          name: backend-secrets
+            name: backend-secrets
         readinessProbe:
           httpGet:
             path: /health
