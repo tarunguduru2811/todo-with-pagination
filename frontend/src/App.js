@@ -114,7 +114,7 @@ function App() {
   return (
     <div className="App">
       <form onSubmit={submitHandler} className='todo-form'>
-        <h3>Add Todo</h3>
+        <h3>Adding Todo</h3>
 
         <div className='add-labels'>
         <label htmlFor="name">Name :</label>
