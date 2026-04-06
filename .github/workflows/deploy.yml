@@ -39,7 +39,7 @@ jobs:
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
-        key_path: /tmp/private_key.pem
+        key: ${{ secrets.EC2_SSH_KEY }}
         port: 22
         debug: true
         script: |
