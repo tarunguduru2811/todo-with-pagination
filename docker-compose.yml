@@ -15,7 +15,7 @@ services:
       - app-network
 
   backend:
-    build: ./backend
+    image: ${DOCKER_USERNAME}/mern-backend:${GITHUB_SHA}
     container_name: backend
     restart: always
     ports:
@@ -32,7 +32,7 @@ services:
       - 1.1.1.1
 
   frontend:
-    build: ./frontend
+    image: ${DOCKER_USERNAME}/mern-frontend:${GITHUB_SHA}
     container_name: frontend
     restart: always
     ports:
