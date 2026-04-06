@@ -7,22 +7,21 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on:  ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
-
     - name: Checkout Code
       uses: actions/checkout@v3
 
     - name: Login to Docker Hub
-      uses: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
     
-    - name: Build backend image
+    - name: Build Backend image
       run: |
         docker build -t ${{ secrets.DOCKER_USERNAME }}/mern-backend:${{ github.sha }} ./backend
-    
+
     - name: Build Frontend image
-      run: | 
+      run: |
         docker build -t ${{ secrets.DOCKER_USERNAME }}/mern-frontend:${{ github.sha }} ./frontend
 
     - name: Push images to Docker Hub
@@ -36,16 +35,20 @@ jobs:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_SSH_KEY }}
-        script: | 
-          export GITHUB_SHA=${{ github.sha }}
+        script: |
+          # Set environment variables for Docker Compose
           export MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME }}
           export MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}
           export MONGO_INITDB_DATABASE=${{ secrets.MONGO_INITDB_DATABASE }}
-          export PORT=5000
-          export MONGODB_URI=mongodb://${{ secrets.MONGO_INITDB_ROOT_USERNAME }}:${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}@mongo:27017/${{ secrets.MONGO_INITDB_DATABASE }}
-          export REACT_APP_API_URL=http://backend:5000
-          docker pull ${{ secrets.DOCKER_USERNAME }}/mern-backend:${{ github.sha }}
-          docker pull ${{ secrets.DOCKER_USERNAME }}/mern-frontend:${{ github.sha }}
+          export PORT=${{ secrets.PORT }}
+          export MONGODB_URI=${{ secrets.MONGODB_URI }}
+          export REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
+          export GITHUB_SHA=${{ github.sha }}
 
+          # Pull the latest images using the commit SHA tag
+          docker pull ${{ secrets.DOCKER_USERNAME }}/mern-backend:${GITHUB_SHA}
+          docker pull ${{ secrets.DOCKER_USERNAME }}/mern-frontend:${GITHUB_SHA}
+
+          # Bring the services down and up again
           docker-compose down
           docker-compose up -d
