@@ -28,13 +28,17 @@ jobs:
       run: |
         docker push ${{ secrets.DOCKER_USERNAME }}/mern-backend:${{ github.sha }}
         docker push ${{ secrets.DOCKER_USERNAME }}/mern-frontend:${{ github.sha }}
+    
+    - name: Deocde SSH key
+      run: echo "${{ secrets.EC2_SSH_KEY }}" | base64 --decode > /tmp/private_key.pem
 
     - name: Deploy to EC2
       uses: appleboy/ssh-action@v1.0.0
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_SSH_KEY }}
+        key: /tmp/private_key.pem
+        debug: true
         script: |
           # Set environment variables for Docker Compose
           export MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME }}
