@@ -52,5 +52,6 @@ jobs:
           docker pull ${{ secrets.DOCKER_USERNAME }}/mern-frontend:${GITHUB_SHA}
 
           # Bring the services down and up again
+          cd /home/ubuntu/todo-with-pagination`
           docker-compose down
           docker-compose up -d
