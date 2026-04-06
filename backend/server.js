@@ -19,6 +19,11 @@ app.use("/api/todo",todoRoutes);
 app.use('/',(req,res)=>{
     res.send("Hello from Tarun...")
 })
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK' });
+});
+
 app.listen(PORT,()=>{
     console.log(`Server is running at ${PORT}`)
 })
