@@ -9,7 +9,7 @@ frontend:
     nodePort: 32000
   
 backend:
-  replicaCount: 2
+  replicaCount: 4
   image:
     repository: tarunguduru2811/todo-backend
     tag: latest
