@@ -1,10 +1,9 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "mern-app.fullname" . }}-backend-monitor
+  name: backend-monitor
   labels:
-    release: prometheus-grafana # This must match the release name or namespace selector for your prometheus!
-    {{- include "mern-app.labels" . | nindent 4 }}
+    release: prometheus-grafana
 spec:
   selector:
     matchLabels:
