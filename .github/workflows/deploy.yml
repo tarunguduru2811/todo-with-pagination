@@ -29,29 +29,15 @@ jobs:
         docker push ${{ secrets.DOCKER_USERNAME }}/mern-backend:${{ github.sha }}
         docker push ${{ secrets.DOCKER_USERNAME }}/mern-frontend:${{ github.sha }}
 
-    - name: Deploy to EC2
-      uses: appleboy/ssh-action@v1.0.0
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_SSH_KEY }}
-        port: 22
-        debug: true
-        script: |
-          # Set environment variables for Docker Compose
-          export MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME }}
-          export MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}
-          export MONGO_INITDB_DATABASE=${{ secrets.MONGO_INITDB_DATABASE }}
-          export PORT=${{ secrets.PORT }}
-          export MONGODB_URI=${{ secrets.MONGODB_URI }}
-          export REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
-          export GITHUB_SHA=${{ github.sha }}
-
-          # Pull the latest images using the commit SHA tag
-          docker pull ${{ secrets.DOCKER_USERNAME }}/mern-backend:${GITHUB_SHA}
-          docker pull ${{ secrets.DOCKER_USERNAME }}/mern-frontend:${GITHUB_SHA}
-
-          # Bring the services down and up again
-          cd /home/ubuntu/todo-with-pagination
-          docker-compose down
-          docker-compose up -d
+    - name: Update Helm Values.yaml
+      run: | 
+        git config --global user.email "actions@github.com"
+        git config --global user.name "github-actions"
+        
+        # Using sed to update specific image tags
+        sed -i '/frontend:/,/tag:/ s/tag:.*/tag: "${{ github.sha }}"/' helm/mern-app/values.yaml
+        sed -i '/backend:/,/tag:/ s/tag:.*/tag: "${{ github.sha }}"/' helm/mern-app/values.yaml
+        
+        git add helm/mern-app/values.yaml
+        git commit -m "ci: update image tags to ${{ github.sha }}"
+        git push
