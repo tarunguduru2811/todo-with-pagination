@@ -8,6 +8,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
     - name: Checkout Code
@@ -15,6 +17,12 @@ jobs:
 
     - name: Login to Docker Hub
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Create .env files for builds
+      run: |
+        echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" > ./frontend/.env
+        echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" > ./backend/.env
+        echo "PORT=5000" >> ./backend/.env
     
     - name: Build Backend image
       run: |
