@@ -1,0 +1,33 @@
+frontend:
+  replicaCount: 2
+  image:
+    repository: tarunguduru2811/todo-frontend
+    tag: latest
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 32000
+  
+backend:
+  replicaCount: 2
+  image:
+    repository: tarunguduru2811/todo-backend
+    tag: latest
+  service:
+    type: ClusterIP
+    port: 5000
+
+mongo:
+  image:
+    repository: mongo
+    tag: "6"
+  storage: 2Gi
+  auth:
+    rootUsername: root
+    rootPassword: password
+    appUsername: admin
+    appPassword: password
+    database: tododb
+
+ingress:
+  host: mern.local
