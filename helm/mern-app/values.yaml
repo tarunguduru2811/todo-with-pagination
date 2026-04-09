@@ -2,7 +2,7 @@ frontend:
   replicaCount: 2
   image:
     repository: tarunguduru2811/todo-frontend
-    tag: "a31fd3036f5420e313027c63447a8c000d8f975e"
+    tag: "da9dad1d2513cdcfec212bf5db68255e2eac5905"
   service:
     type: NodePort
     port: 80
@@ -12,7 +12,7 @@ backend:
   replicaCount: 2
   image:
     repository: tarunguduru2811/todo-backend
-    tag: "a31fd3036f5420e313027c63447a8c000d8f975e"
+    tag: "da9dad1d2513cdcfec212bf5db68255e2eac5905"
   service:
     type: ClusterIP
     port: 5000
