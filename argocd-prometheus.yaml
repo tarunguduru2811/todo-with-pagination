@@ -20,6 +20,11 @@ spec:
             serviceMonitorSelectorNilUsesHelmValues: false
             serviceMonitorSelector: {}
             serviceMonitorNamespaceSelector: {}
+  ignoreDifferences:
+    - group: "*"
+      kind: "*"
+      jqPathExpressions:
+        - .status.terminatingReplicas
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: monitoring
